@@ -1,4 +1,6 @@
-const houses = require("./houses.json");
+//   "resolveJsonModule": true in tsconfig.json  to import JSON data
+
+import houses from "./houses.json";
 
 interface House {
   name: string;
@@ -9,25 +11,21 @@ interface HouseWithID extends House {
   id: number;
 }
 
-function findHouses(houses: string): HouseWithID[];
+type HouseFilter = string;
+
 function findHouses(
-  houses: string,
-  filter: (house: House) => boolean
-): HouseWithID[];
-function findHouses(houses: House[]): HouseWithID[];
-function findHouses(
-  houses: House[],
-  filter: (house: House) => boolean
-): HouseWithID[];
-function findHouses(
-  houses: string | House[],
-  filter?: (house: House) => boolean
+  input: string | House[],
+  houseFilter?: HouseFilter
 ): HouseWithID[] {
-  return [];
+  const houses: House[] = typeof input === "string" ? JSON.parse(input) : input;
+  return (
+    houseFilter ? houses.filter(({ name }) => name === houseFilter) : houses
+  ).map((house) => ({
+    id: houses.indexOf(house),
+    ...house,
+  }));
 }
 
-console.log(
-  findHouses(JSON.stringify(houses), ({ name }) => name === "Atreides")
-);
+console.log(findHouses(JSON.stringify(houses), "Atreides"));
 
-console.log(findHouses(houses, ({ name }) => name === "Harkonnen"));
+console.log(findHouses(houses, "Harkonnen"));
