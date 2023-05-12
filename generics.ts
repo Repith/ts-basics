@@ -21,9 +21,10 @@ myState2Setter("goodbye");
 console.log(myState2Getter());
 
 interface Rank<RankItem> {
-  items: RankItem;
+  item: RankItem;
   rank: number;
 }
+
 function ranker<RankItem>(
   items: RankItem[],
   rank: (v: RankItem) => number
@@ -33,7 +34,7 @@ function ranker<RankItem>(
     rank: rank(item),
   }));
 
-  ranks.sort((a, b) => a.rank - b.rank);
+  ranks.sort((a, b) => b.rank - a.rank);
 
   return ranks.map((rank) => rank.item);
 }
